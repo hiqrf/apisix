@@ -89,13 +89,8 @@ end
 
 function _M.restrict(conf, ctx)
     local block = false
-    local remote_addr_arr = ctx.var.http_x_forwarded_for
-    local ipList = {}
-    local reps = ","
-    string.gsub(remote_addr_arr, '[^' .. reps .. ']+', function(w)
-        table.insert(ipList, w)
-    end)
-    local remote_addr = remote_addr_arr[1]
+    local remote_addr = ctx.var.remote_addr
+
     if conf.blacklist then
         local matcher = lrucache(conf.blacklist, nil,
                                  core.ip.create_ip_matcher, conf.blacklist)
